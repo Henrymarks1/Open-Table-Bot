@@ -103,10 +103,10 @@ date = "2023-07-25"
 time = "18:00"
 party_size = 2
 open_table_token = os.environ.get('OPEN_TABLE_TOKEN')
-bad_roman_id = 1268701
+resturant_id = 1268701
 firstName = "Henry"
 lastName = "Marks"
 email = "henryesmarks@gmail.com"
 
-OpenTable(open_table_token=open_table_token, resturant_id=bad_roman_id,
+OpenTable(open_table_token=open_table_token, resturant_id=resturant_id,
           date=date, time=time, party_size=party_size, firstName=firstName, lastName=lastName, email=email)
