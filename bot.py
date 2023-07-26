@@ -2,6 +2,9 @@ import requests
 import json
 from dotenv import load_dotenv
 import os
+import schedule
+import datetime
+import time as times
 
 
 class OpenTable:
@@ -99,14 +102,35 @@ class OpenTable:
 
 load_dotenv()
 
-date = "2023-07-25"
-time = "18:00"
+date = "2023-08-15"
+time = "19:00"
+reservation_open_time = "12:29"
 party_size = 2
 open_table_token = os.environ.get('OPEN_TABLE_TOKEN')
-resturant_id = 1268701
+# resturant_id = 1268701
+resturant_id = 8033
 firstName = "Henry"
 lastName = "Marks"
 email = "henryesmarks@gmail.com"
 
-OpenTable(open_table_token=open_table_token, resturant_id=resturant_id,
-          date=date, time=time, party_size=party_size, firstName=firstName, lastName=lastName, email=email)
+
+def make_reservation():
+    OpenTable(open_table_token=open_table_token, resturant_id=resturant_id,
+              date=date, time=time, party_size=party_size, firstName=firstName, lastName=lastName, email=email)
+    return schedule.CancelJob
+
+
+schedule.every().day.at(reservation_open_time).do(make_reservation)
+
+
+while True:
+    schedule.run_pending()
+    if len(schedule.jobs) == 0:
+        print("Completed Task")
+        break
+    else:
+        next_run = schedule.next_run()
+        current_time = datetime.datetime.now()
+        remaining_seconds = int((next_run - current_time).total_seconds())
+        print("Running in: " + str(remaining_seconds) + " seconds")
+        times.sleep(1)
