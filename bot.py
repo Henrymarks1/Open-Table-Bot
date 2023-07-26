@@ -8,7 +8,7 @@ import time as times
 
 
 class OpenTable:
-    def __init__(self, open_table_token, resturant_id, date, time, party_size, firstName, lastName, email):
+    def __init__(self, open_table_token, resturant_id, date, time, party_size, firstName, lastName, email, phone_no):
         self.open_table_token = open_table_token
         self.resturant_id = resturant_id
         self.date = date
@@ -17,6 +17,7 @@ class OpenTable:
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
+        self.phone_no = phone_no
         self.url_head = "https://www.opentable.com/dapi"
         self.headers = {
             'content-type': 'application/json',
@@ -75,7 +76,7 @@ class OpenTable:
             "slotHash":  slot_hash,
             "isModify": False,
             "reservationDateTime": self.date + "T" + self.time,
-            "partySize": 2,
+            "partySize": self.party_size,
             "firstName": self.firstName,
             "lastName": self.lastName,
             "email": self.email,
@@ -89,7 +90,7 @@ class OpenTable:
             "points": 100,
             "diningAreaId": 1,
             "fbp": "fb.1.1685721920137.7677309689611231",
-            "phoneNumber": "7185010213",
+            "phoneNumber": self.phone_no,
             "phoneNumberCountryId": "US",
             "optInEmailRestaurant": False
         })
@@ -104,19 +105,20 @@ load_dotenv()
 
 date = "2023-08-15"
 time = "19:00"
-reservation_open_time = "12:29"
+reservation_open_time = "12:38"
 party_size = 2
 open_table_token = os.environ.get('OPEN_TABLE_TOKEN')
 # resturant_id = 1268701
 resturant_id = 8033
-firstName = "Henry"
-lastName = "Marks"
-email = "henryesmarks@gmail.com"
+firstName = os.environ.get('FIRST_NAME')
+lastName = os.environ.get('LAST_NAME')
+email = os.environ.get("EMAIL")
+phone_no = os.environ.get("PHONE_NO")
 
 
 def make_reservation():
     OpenTable(open_table_token=open_table_token, resturant_id=resturant_id,
-              date=date, time=time, party_size=party_size, firstName=firstName, lastName=lastName, email=email)
+              date=date, time=time, party_size=party_size, firstName=firstName, lastName=lastName, email=email, phone_no=phone_no)
     return schedule.CancelJob
 
 
